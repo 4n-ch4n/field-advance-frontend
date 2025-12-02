@@ -1,0 +1,191 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Header Section -->
+  <div class="mb-8">
+    <button class="btn btn-ghost mb-4" routerLink="/">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Volver
+    </button>
+
+    <h1 class="text-4xl font-bold font-montserrat mb-2">
+      Generar <span class="text-secondary">Reporte</span>
+    </h1>
+    <p class="text-base-content/70 text-lg">
+      Descarga el reporte completo de avance de muros en formato Excel
+    </p>
+  </div>
+
+  <!-- Main Card -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Left Side - Info -->
+    <div class="space-y-6">
+      <!-- Report Preview Card -->
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title text-2xl font-montserrat mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Vista Previa del Reporte
+          </h2>
+
+          <div class="space-y-4">
+            <div class="alert alert-info">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>El reporte incluye todos los muros registrados con su información completa</span>
+            </div>
+
+            <div class="divider">Contenido del Reporte</div>
+
+            <ul class="menu bg-base-200 rounded-box">
+              <li class="menu-title">
+                <span>Columnas Incluidas</span>
+              </li>
+              <li>
+                <a>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  ID de Elemento
+                </a>
+              </li>
+              <li>
+                <a>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Volumen de Concreto (m³)
+                </a>
+              </li>
+              <li>
+                <a>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Área de Formaleta (m²)
+                </a>
+              </li>
+              <li>
+                <a>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Hitos (1-5)
+                </a>
+              </li>
+              <li>
+                <a>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Avance Total (%)
+                </a>
+              </li>
+              <li>
+                <a>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Costo Unitario y Ejecutado
+                </a>
+              </li>
+              <li>
+                <a>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Registro de Avance
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side - Download Action -->
+    <div class="space-y-6">
+      <!-- Download Card -->
+      <div class="card bg-linear-to-br from-secondary/10 to-primary/10 shadow-xl border-2 border-secondary/20">
+        <div class="card-body items-center text-center">
+          <div class="mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-secondary mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+
+          <h2 class="card-title text-3xl font-montserrat mb-2">
+            Descargar Reporte Excel
+          </h2>
+          <p class="text-base-content/70 mb-6">
+            Archivo optimizado con formato y fórmulas calculadas automáticamente
+          </p>
+
+          <div class="w-full space-y-4">
+            <button
+              class="btn btn-secondary btn-lg w-full gap-2"
+              (click)="downloadReport()"
+              [disabled]="isDownloading()"
+            >
+              @if (isDownloading()) {
+                <span class="loading loading-spinner loading-md"></span>
+                Generando reporte...
+              } @else {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Descargar Ahora
+              }
+            </button>
+
+            @if (downloadSuccess()) {
+              <div class="alert alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>¡Reporte descargado exitosamente!</span>
+              </div>
+            }
+          </div>
+
+          <div class="divider">Información Adicional</div>
+
+          <div class="grid grid-cols-1 gap-3 w-full text-left">
+            <div class="flex items-start gap-3 bg-base-100 p-3 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-info mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <div>
+                <p class="font-semibold text-sm">Formato del Archivo</p>
+                <p class="text-xs text-base-content/70">Microsoft Excel (.xlsx)</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-base-100 p-3 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <p class="font-semibold text-sm">Fórmulas Incluidas</p>
+                <p class="text-xs text-base-content/70">Cálculos automáticos de avance y costos</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-base-100 p-3 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-warning mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <p class="font-semibold text-sm">Actualización</p>
+                <p class="text-xs text-base-content/70">Datos en tiempo real al momento de descarga</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

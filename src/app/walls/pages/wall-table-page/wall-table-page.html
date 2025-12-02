@@ -1,0 +1,89 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Header Section -->
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold font-montserrat mb-2">
+      Registro de <span class="text-secondary">Muros</span>
+    </h1>
+    <p class="text-base-content/70 text-lg">Visualiza y gestiona todos los muros del proyecto</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="mb-8">
+    <div class="stats shadow-lg bg-base-100 w-full">
+      <div class="stat">
+        <div class="stat-figure text-secondary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="inline-block h-12 w-12 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+            />
+          </svg>
+        </div>
+        <div class="stat-title text-lg">Total Muros</div>
+        <div class="stat-value text-secondary text-5xl">
+          {{ wallsResource.value()?.length || 0 }}
+        </div>
+        <div class="stat-desc text-base mt-2">Elementos registrados en el proyecto</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-6">
+    <label class="input">
+      <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g
+          stroke-linejoin="round"
+          stroke-linecap="round"
+          stroke-width="2.5"
+          fill="none"
+          stroke="currentColor"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </g>
+      </svg>
+      <input
+        type="search"
+        class="grow"
+        placeholder="Buscar por ID"
+        (input)="searchTerm.set($event.target.value)"
+        (keyup.enter)="searchTerm.set($event.target.value)"
+      />
+    </label>
+  </div>
+
+  <!-- Table Section -->
+  <div class="bg-base-100 rounded-lg shadow-lg overflow-hidden">
+    @if (wallsResource.isLoading()) {
+    <div class="flex justify-center items-center py-20">
+      <span class="loading loading-spinner loading-lg text-secondary"></span>
+    </div>
+    } @if (wallsResource.hasValue()) {
+    <app-table [walls]="walls()" />
+    } @if (wallsResource.error()) {
+    <div class="alert alert-error m-4">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 shrink-0 stroke-current"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span>Error al cargar los muros. Por favor, intenta de nuevo.</span>
+    </div>
+    }
+  </div>
+</div>
