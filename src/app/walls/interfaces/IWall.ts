@@ -1,7 +1,7 @@
-import { IProgressLog } from "./IProgressLog";
+import { IWallLevel } from "./IWallLevel";
 
 export interface IWall {
-  progressLogs: IProgressLog[];
+  wallLevels: IWallLevel[];
   id:           string;
   elementId:    string;
   budgetCode:   string | null;

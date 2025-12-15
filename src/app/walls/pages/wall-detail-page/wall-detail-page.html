@@ -23,7 +23,7 @@
           </p>
         </div>
 
-        <!-- Progress Badge -->
+        <!-- Overall Progress Badge -->
         <div class="badge badge-lg badge-secondary gap-2 p-4 text-xs">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -57,12 +57,13 @@
 
       <div class="stat bg-base-100 shadow-lg rounded-lg">
         <div class="stat-figure text-accent">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
           </svg>
         </div>
-        <div class="stat-title">Costo Unitario</div>
-        <div class="stat-value text-accent text-2xl">${{ wallResource.value().unitCost | number:'1.0-0' }}</div>
+        <div class="stat-title">Nivel Actual</div>
+        <div class="stat-value text-accent text-2xl">{{ currentLevel() }} / 8</div>
+        <div class="stat-desc">{{ wallResource.value().wallLevels.length }} niveles activos</div>
       </div>
 
       <div class="stat bg-base-100 shadow-lg rounded-lg">
@@ -72,42 +73,148 @@
           </svg>
         </div>
         <div class="stat-title">Hitos Completados</div>
-        <div class="stat-value text-success text-2xl">{{ getCurrentMilestone() }} / 5</div>
+        <div class="stat-value text-success text-2xl">{{ getCurrentMilestone() }} / 4</div>
+        <div class="stat-desc">Nivel {{ currentLevel() }}</div>
       </div>
     </div>
 
-    <!-- Milestones Accordion -->
-    <div class="bg-base-100 shadow-lg rounded-lg p-6">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold font-montserrat">Progreso de Hitos</h2>
-        <button class="btn btn-secondary btn-sm" (click)="openModal.set(true)">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-          Registrar Avance
-        </button>
+    <!-- Level Selector Tabs -->
+    <div class="bg-base-100 shadow-lg rounded-lg p-6 mb-6">
+      <h2 class="text-2xl font-bold font-montserrat mb-4 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+        Seleccionar Nivel
+      </h2>
+
+      <div class="tabs tabs-boxed bg-base-200 p-2">
+        @for (level of wallResource.value().wallLevels; track level) {
+          <button
+            class="tab gap-2"
+            [class.tab-active]="currentLevel() === level.level"
+            (click)="setCurrentLevel(level.level)"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            Nivel {{ level.level }}
+            @if (isLevelCompleted(level.level)) {
+              <div class="badge badge-success badge-sm">✓</div>
+            }
+          </button>
+        }
       </div>
 
-      <div class="space-y-3">
-        @for (milestone of [1, 2, 3, 4, 5]; track milestone) {
+      <!-- Level Info Alert -->
+      @if (getCurrentWallLevel(); as wallLevel) {
+        <div class="mt-4">
+          @if (wallLevel.completed && !wallLevel.isActive) {
+            <div class="alert alert-success">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <div class="font-bold">✅ Nivel {{ currentLevel() }} completado</div>
+                <div class="text-sm">
+                  Trabajo finalizado el {{ wallLevel.completedAt | date:'dd/MM/yyyy HH:mm' }}.
+                </div>
+              </div>
+            </div>
+          } @else if (canActivateNextLevel()) {
+            <div class="alert alert-success">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <div class="font-bold">¡Nivel {{ currentLevel() }} completado!</div>
+                <div class="text-sm">El siguiente nivel se desbloqueará automáticamente al registrar el Hito 4.</div>
+              </div>
+            </div>
+          } @else if (wallLevel.isActive && !wallLevel.completed) {
+            <div class="alert alert-info">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <div class="font-bold">Nivel {{ currentLevel() }} en progreso</div>
+                <div class="text-sm">
+                  Iniciado el {{ wallLevel.createdAt | date:'dd/MM/yyyy HH:mm' }} -
+                  Hito actual: {{ getCurrentMilestone() }} de 5
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Progress Section for Current Level -->
+    <div class="bg-base-100 shadow-lg rounded-lg p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold font-montserrat flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          </svg>
+          Progreso - Nivel {{ currentLevel() }}
+        </h2>
+
+        @if (canRegisterProgress()) {
+          <button class="btn btn-secondary btn-sm gap-2" (click)="openModal.set(true)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Registrar Hito {{ getCurrentMilestone() + 1 }}
+          </button>
+        } @else {
+          <div class="badge badge-ghost gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            Nivel bloqueado
+          </div>
+        }
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="mb-6">
+        <div class="flex justify-between text-sm mb-2">
+          <span class="font-semibold">Avance del Nivel</span>
+          <span class="font-bold text-secondary">{{ getProgressPercentage() }}%</span>
+        </div>
+        <progress
+          class="progress progress-secondary w-full h-4"
+          [value]="getProgressPercentage()"
+          max="100"
+        ></progress>
+      </div>
+
+      <!-- Milestones Timeline -->
+      <div class="space-y-4">
+        @for (milestone of [1, 2, 3, 4]; track milestone) {
           @if (getMilestoneLog(milestone); as log) {
             <!-- Completed Milestone -->
             <div class="collapse collapse-arrow bg-base-200 border-l-4 border-success">
-              <input type="checkbox" [id]="'milestone-' + milestone" />
+              <input type="checkbox" [id]="'milestone-' + currentLevel() + '-' + milestone" />
               <div class="collapse-title">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-3">
-                    <div class="badge badge-success gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                      </svg>
-                      Completado
-                    </div>
-                    <span class="font-semibold text-lg">
-                      Hito {{ milestone }}
-                    </span>
+                    @if (milestone === 0) {
+                      <div class="badge badge-info gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                        </svg>
+                        Inicio
+                      </div>
+                    } @else {
+                      <div class="badge badge-success gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Completado
+                      </div>
+                    }
                   </div>
-                  <div class="text-sm text-base-content/70 ml-2">
+                  <div class="text-sm text-base-content/70">
                     {{ log.registeredAt | date:'dd/MM/yyyy HH:mm' }}
                   </div>
                 </div>
@@ -115,7 +222,7 @@
               <div class="collapse-content">
                 <div class="divider my-2"></div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div class="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -136,21 +243,6 @@
 
                   <div class="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span class="text-sm">
-                      <strong>Fotos:</strong> {{ log.photos.length }}
-                      @if (log.photos.length === 1) {
-                        registrada
-                      } @else {
-                        registradas
-                      }
-                    </span>
-                  </div>
-
-                  <div class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-base-content/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span class="text-sm">
@@ -159,27 +251,27 @@
                   </div>
                 </div>
 
-                @if (log.photos.length > 0) {
+                @if (log.photos && log.photos.length > 0) {
                   <div class="mt-4">
                     <h4 class="font-semibold mb-3 flex items-center gap-2">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      Galería de Fotos
+                      Galería de Fotos ({{ log.photos.length }})
                     </h4>
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                       @for (photo of log.photos; track photo) {
-                        <div class="aspect-square rounded-lg overflow-hidden group">
+                        <div class="aspect-square rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity shadow-md">
                           <img
                             [src]="photo"
-                            alt="Foto del hito {{ milestone }}"
-                            class="w-full h-full"
+                            [alt]="'Foto del hito ' + milestone"
+                            class="w-full h-full object-cover"
                           />
                         </div>
                       }
                     </div>
                   </div>
-                } @else {
+                } @else if (milestone > 0) {
                   <div class="alert alert-info mt-4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -189,25 +281,20 @@
                 }
               </div>
             </div>
-          } @else {
+          } @else if (milestone > 0) {
             <!-- Pending Milestone -->
-            <div class="collapse bg-base-200 border-l-4 border-base-300 opacity-60">
-              <div class="collapse-title cursor-default">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-3">
-                    <div class="badge badge-ghost gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      Pendiente
-                    </div>
-                    <span class="font-semibold text-lg">
-                      Hito {{ milestone }}
-                    </span>
+            <div class="bg-base-200 border-l-4 border-base-300 rounded-lg p-4 opacity-60">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="badge badge-ghost gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Pendiente
                   </div>
-                  <div class="text-sm text-base-content/50">
-                    Sin registrar
-                  </div>
+                </div>
+                <div class="text-sm text-base-content/50">
+                  Sin registrar
                 </div>
               </div>
             </div>
@@ -216,11 +303,15 @@
       </div>
     </div>
   } @else if (wallResource.error()) {
-    <div class="alert alert-error">
+    <div class="alert alert-error shadow-lg">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
-      <span>Error al cargar los detalles del muro</span>
+      <div>
+        <div class="font-bold">Error al cargar los detalles del muro</div>
+        <div class="text-sm">{{ wallResource.error() }}</div>
+      </div>
+      <button class="btn btn-sm" (click)="wallResource.reload()">Reintentar</button>
     </div>
   }
 </div>
@@ -229,6 +320,7 @@
   <app-progress-registry
     [currentMilestone]="getCurrentMilestone()"
     [wallId]="wallResource.value()!.elementId"
+    [wallLevelId]="getCurrentWallLevel()!.id!"
     (closeDialog)="openModal.set(false); wallResource.reload()"
   />
 }

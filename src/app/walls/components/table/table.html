@@ -4,9 +4,6 @@
     <thead>
       <tr>
         <th>ID</th>
-        <th>Codigo de Contabilidad</th>
-        <th>Volumen de Concreto</th>
-        <th>Area de Formaleta</th>
         <th>Acciones</th>
       </tr>
     </thead>
@@ -14,9 +11,6 @@
       @for (wall of walls(); track wall.id) {
         <tr>
           <th>{{ wall.elementId }}</th>
-          <th>{{ wall.budgetCode || 'Sin Codigo' }}</th>
-          <td>{{ wall.concreteVol }}</td>
-          <td>{{ wall.formworkArea }}</td>
           <a class="btn btn-sm btn-ghost mt-1.5" [routerLink]="['/muro', wall.elementId]">
             <svg
               xmlns="http://www.w3.org/2000/svg"

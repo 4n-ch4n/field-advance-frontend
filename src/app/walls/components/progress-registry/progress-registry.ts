@@ -33,22 +33,24 @@ export class ProgressRegistry implements OnInit {
 
   currentMilestone = input.required<number>();
   wallId = input.required<string>();
+  wallLevelId = input.required<string>();
 
   closeDialog = output<void>();
   submitSuccess = output<void>();
 
   milestoneForm = this.fb.group({
     wallId: ['', Validators.required],
+    wallLevelId: ['', Validators.required],
     milestone: [0, [Validators.required, Validators.min(0), Validators.max(5)]],
     photos: [[] as string[]],
   });
 
   ngOnInit(): void {
-    this.setFormValue(this.wallId(), this.currentMilestone());
+    this.setFormValue(this.wallId(), this.wallLevelId(), this.currentMilestone());
   }
 
-  setFormValue(wallId: string, milestone: number) {
-    this.milestoneForm.patchValue({ milestone: milestone + 1, wallId: wallId });
+  setFormValue(wallId: string, wallLevelId: string, milestone: number) {
+    this.milestoneForm.patchValue({ milestone: milestone + 1, wallId: wallId, wallLevelId: wallLevelId });
   }
 
   async onFilesChange(event: Event) {
